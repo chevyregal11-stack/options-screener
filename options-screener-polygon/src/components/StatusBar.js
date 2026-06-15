@@ -1,11 +1,16 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 
 export default function StatusBar({
-  loading, lastScan, error, resultCount, tickers, onTickersChange,
+  loading, lastScan, error, resultCount, tickers, onTickersChange, scanProgress,
 }) {
-  function handleTickerInput(e) {
-    const val = e.target.value;
-    const parsed = val
+  const [inputVal, setInputVal] = useState(tickers.join(", "));
+
+  useEffect(() => {
+    setInputVal(tickers.join(", "));
+  }, [tickers]);
+
+  function handleSave() {
+    const parsed = inputVal
       .toUpperCase()
       .split(/[\s,]+/)
       .map((t) => t.trim())
@@ -13,9 +18,13 @@ export default function StatusBar({
     if (parsed.length > 0) onTickersChange(parsed);
   }
 
+  function handleKeyDown(e) {
+    if (e.key === "Enter") { e.target.blur(); handleSave(); }
+  }
+
   const dotClass = loading ? "loading" : error ? "error" : "";
   const statusText = loading
-    ? "Scanning..."
+    ? (scanProgress || "Scanning...")
     : lastScan
     ? `Last scan: ${lastScan.toLocaleTimeString()}`
     : "Not scanned yet";
@@ -34,10 +43,13 @@ export default function StatusBar({
         <label>Watchlist:</label>
         <input
           className="ticker-input"
-          defaultValue={tickers.join(", ")}
-          onBlur={handleTickerInput}
+          value={inputVal}
+          onChange={(e) => setInputVal(e.target.value)}
+          onBlur={handleSave}
+          onKeyDown={handleKeyDown}
           placeholder="SPY, QQQ, NVDA, TSLA..."
         />
+        <button className="save-tickers-btn" onClick={handleSave}>Save</button>
       </div>
     </div>
   );

@@ -375,3 +375,16 @@ tr:last-child td { border-bottom: none; }
   animation: loadingSlide 1.2s linear infinite;
 }
 @keyframes loadingSlide { 0%{background-position:100% 0} 100%{background-position:-100% 0} }
+
+.save-tickers-btn {
+  background: #1a1a3a;
+  border: 1px solid #3333aa;
+  color: #8888ee;
+  padding: 4px 12px;
+  border-radius: 5px;
+  font-size: 12px;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.15s;
+}
+.save-tickers-btn:hover { background: #222250; color: #aaaaff; }
